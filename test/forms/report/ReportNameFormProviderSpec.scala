@@ -44,14 +44,5 @@ class ReportNameFormProviderSpec extends StringFieldBehaviours {
       maxLength = maxLength,
       lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
     )
-
-    "with invalid characters" - {
-      behave like fieldThatErrorsOnInvalidData(
-        form,
-        fieldName,
-        stringsWithMaxLength(maxLength),
-        FormError(fieldName, invalidCharactersKey)
-      )
-    }
   }
 }

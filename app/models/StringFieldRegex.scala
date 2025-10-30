@@ -17,7 +17,6 @@
 package models
 
 object StringFieldRegex {
-  val reportNameRegex = """^[a-zA-Z0-9 ]*$"""
   val eoriNumberRegex = """^[GgBb0-9]*$"""
   val eoriFormatRegex = "^[A-Za-z]{2}[0-9]{12}(?:[0-9]{3})?$"
   val emailRegex      = """^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$"""

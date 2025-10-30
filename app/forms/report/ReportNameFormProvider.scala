@@ -33,8 +33,5 @@ class ReportNameFormProvider @Inject() extends Mappings {
     Form(
       "value" -> text(requiredKey)
         .verifying(maxLength(maxNameLength, lengthKey))
-        .verifying(
-          regexp(StringFieldRegex.reportNameRegex, invalidKey)
-        )
     )
 }

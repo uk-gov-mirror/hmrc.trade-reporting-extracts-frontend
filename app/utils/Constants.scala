@@ -17,7 +17,7 @@
 package utils
 
 case object Constants {
-  val maxNameLength: Int = 70
+  val maxNameLength: Int = 100
   val eori: String       = "eori"
   val eoriMaxLength: Int = 17
   val eoriMinLength: Int = 14
