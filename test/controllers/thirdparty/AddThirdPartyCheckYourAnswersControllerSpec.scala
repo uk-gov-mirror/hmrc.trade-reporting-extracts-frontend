@@ -17,27 +17,32 @@
 package controllers.thirdparty
 
 import base.SpecBase
-import models.{CompanyInformation, ConsentStatus, SectionNavigation}
+import models.thirdparty.*
+import models.{CompanyInformation, ConsentStatus}
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.when
+import org.mockito.Mockito.{times, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.thirdparty.{EoriNumberPage, ThirdPartyReferencePage}
-import play.api.inject
+import org.scalatestplus.mockito.MockitoSugar.mock
+import pages.thirdparty.*
+import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
-import services.TradeReportingExtractsService
+import services.{AuditService, ThirdPartyService, TradeReportingExtractsService}
 import viewmodels.checkAnswers.thirdparty.{BusinessInfoSummary, EoriNumberSummary, ThirdPartyReferenceSummary}
 import viewmodels.govuk.all.SummaryListViewModel
 import views.html.thirdparty.AddThirdPartyCheckYourAnswersView
 
+import java.time.{Clock, Instant, LocalDate, ZoneOffset}
 import scala.concurrent.Future
 
 class AddThirdPartyCheckYourAnswersControllerSpec extends SpecBase with MockitoSugar {
 
-  "AddThirdPartyCheckYourAnswers Controller" - {
+  private val fixedClock: Clock                                        = Clock.fixed(Instant.parse("2025-05-05T10:15:30Z"), ZoneOffset.UTC)
+  val mockTradeReportingExtractsService: TradeReportingExtractsService = mock[TradeReportingExtractsService]
+  val mockAuditService: AuditService                                   = mock[AuditService]
+  val mockThirdPartyService: ThirdPartyService                         = mock[ThirdPartyService]
 
-    val mockTradeReportingExtractsService = mock[TradeReportingExtractsService]
-    val sectionNav                        = SectionNavigation("addThirdPartySection")
+  "AddThirdPartyCheckYourAnswers Controller" - {
 
     "must return OK and the correct view for a GET when business consent given" in {
 
@@ -52,16 +57,14 @@ class AddThirdPartyCheckYourAnswersControllerSpec extends SpecBase with MockitoS
       val application =
         applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(
-            inject.bind[TradeReportingExtractsService].toInstance(mockTradeReportingExtractsService)
+            bind[TradeReportingExtractsService].toInstance(mockTradeReportingExtractsService)
           )
           .build()
 
       running(application) {
         val request = FakeRequest(GET, routes.AddThirdPartyCheckYourAnswersController.onPageLoad().url)
-
-        val result = route(application, request).value
-
-        val view = application.injector.instanceOf[AddThirdPartyCheckYourAnswersView]
+        val result  = route(application, request).value
+        val view    = application.injector.instanceOf[AddThirdPartyCheckYourAnswersView]
 
         val list = SummaryListViewModel(
           Seq(
@@ -91,16 +94,14 @@ class AddThirdPartyCheckYourAnswersControllerSpec extends SpecBase with MockitoS
       val application =
         applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(
-            inject.bind[TradeReportingExtractsService].toInstance(mockTradeReportingExtractsService)
+            bind[TradeReportingExtractsService].toInstance(mockTradeReportingExtractsService)
           )
           .build()
 
       running(application) {
         val request = FakeRequest(GET, routes.AddThirdPartyCheckYourAnswersController.onPageLoad().url)
-
-        val result = route(application, request).value
-
-        val view = application.injector.instanceOf[AddThirdPartyCheckYourAnswersView]
+        val result  = route(application, request).value
+        val view    = application.injector.instanceOf[AddThirdPartyCheckYourAnswersView]
 
         val list = SummaryListViewModel(
           Seq(
@@ -114,16 +115,69 @@ class AddThirdPartyCheckYourAnswersControllerSpec extends SpecBase with MockitoS
       }
     }
 
-    "must redirect to the next page for a POST" in {
-      val userAnswers =
-        emptyUserAnswers.set(sectionNav, "/request-customs-declaration-data/check-your-answers").success.value
+    "must redirect to confirmation page for a POST" in {
+      val userAnswers = emptyUserAnswers
+        .set(ThirdPartyDataOwnerConsentPage, true)
+        .success
+        .value
+        .set(EoriNumberPage, "GB123456789000")
+        .success
+        .value
+        .set(ConfirmEoriPage, ConfirmEori.Yes)
+        .success
+        .value
+        .set(ThirdPartyReferencePage, "ref")
+        .success
+        .value
+        .set(ThirdPartyAccessStartDatePage, LocalDate.of(2025, 1, 1))
+        .success
+        .value
+        .set(ThirdPartyAccessEndDatePage, Some(LocalDate.of(2025, 1, 1)))
+        .success
+        .value
+        .set(DataTypesPage, Set(DataTypes.Export))
+        .success
+        .value
+        .set(DeclarationDatePage, DeclarationDate.CustomDateRange)
+        .success
+        .value
+        .set(DataStartDatePage, LocalDate.of(2025, 1, 1))
+        .success
+        .value
+        .set(DataEndDatePage, Some(LocalDate.of(2025, 1, 1)))
+        .success
+        .value
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      when(mockThirdPartyService.buildThirdPartyAddRequest(any(), any())).thenReturn(
+        ThirdPartyRequest(
+          userEORI = "GB987654321098",
+          thirdPartyEORI = "GB123456123456",
+          accessStart = Instant.parse("2025-09-09T00:00:00Z"),
+          accessEnd = Some(Instant.parse("2025-09-09T10:59:38.334682780Z")),
+          reportDateStart = Some(Instant.parse("2025-09-10T00:00:00Z")),
+          reportDateEnd = Some(Instant.parse("2025-09-09T10:59:38.334716742Z")),
+          accessType = Set("IMPORT", "EXPORT"),
+          referenceName = Some("TestReport")
+        )
+      )
+
+      when(mockTradeReportingExtractsService.createThirdPartyAddRequest(any())(any()))
+        .thenReturn(Future.successful(ThirdPartyAddedConfirmation(thirdPartyEori = "GB123456123456")))
+
+      when(mockTradeReportingExtractsService.getCompanyInformation(any())(any()))
+        .thenReturn(Future.successful(CompanyInformation("businessInfo", ConsentStatus.Granted)))
+      when(mockAuditService.auditThirdPartyAdded(any())(any())).thenReturn(Future.successful(()))
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(
+          bind[TradeReportingExtractsService].toInstance(mockTradeReportingExtractsService),
+          bind[Clock].toInstance(fixedClock)
+        )
+        .build()
 
       running(application) {
         val request = FakeRequest(POST, routes.AddThirdPartyCheckYourAnswersController.onSubmit().url)
-
-        val result = route(application, request).value
+        val result  = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
         redirectLocation(result).value mustEqual controllers.thirdparty.routes.ThirdPartyAddedConfirmationController
@@ -131,5 +185,80 @@ class AddThirdPartyCheckYourAnswersControllerSpec extends SpecBase with MockitoS
           .url
       }
     }
+
+    "must return correct details for audit event" in {
+      val userAnswers = emptyUserAnswers
+        .set(ThirdPartyDataOwnerConsentPage, true)
+        .success
+        .value
+        .set(EoriNumberPage, "GB123456789000")
+        .success
+        .value
+        .set(ConfirmEoriPage, ConfirmEori.Yes)
+        .success
+        .value
+        .set(ThirdPartyReferencePage, "ref")
+        .success
+        .value
+        .set(ThirdPartyAccessStartDatePage, LocalDate.of(2025, 1, 1))
+        .success
+        .value
+        .set(ThirdPartyAccessEndDatePage, Some(LocalDate.of(2025, 1, 1)))
+        .success
+        .value
+        .set(DataTypesPage, Set(DataTypes.Export))
+        .success
+        .value
+        .set(DeclarationDatePage, DeclarationDate.CustomDateRange)
+        .success
+        .value
+        .set(DataStartDatePage, LocalDate.of(2025, 1, 1))
+        .success
+        .value
+        .set(DataEndDatePage, Some(LocalDate.of(2025, 1, 1)))
+        .success
+        .value
+
+      when(mockThirdPartyService.buildThirdPartyAddRequest(any(), any())).thenReturn(
+        ThirdPartyRequest(
+          userEORI = "GB987654321098",
+          thirdPartyEORI = "GB123456123456",
+          accessStart = Instant.parse("2025-09-09T00:00:00Z"),
+          accessEnd = Some(Instant.parse("2025-09-09T10:59:38.334682780Z")),
+          reportDateStart = Some(Instant.parse("2025-09-10T00:00:00Z")),
+          reportDateEnd = Some(Instant.parse("2025-09-09T10:59:38.334716742Z")),
+          accessType = Set("IMPORT", "EXPORT"),
+          referenceName = Some("TestReport")
+        )
+      )
+
+      when(mockTradeReportingExtractsService.createThirdPartyAddRequest(any())(any()))
+        .thenReturn(Future.successful(ThirdPartyAddedConfirmation(thirdPartyEori = "GB123456123456")))
+
+      when(mockTradeReportingExtractsService.getCompanyInformation(any())(any()))
+        .thenReturn(Future.successful(CompanyInformation("businessInfo", ConsentStatus.Granted)))
+      when(mockAuditService.auditThirdPartyAdded(any())(any())).thenReturn(Future.successful(()))
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(
+          bind[TradeReportingExtractsService].toInstance(mockTradeReportingExtractsService),
+          bind[ThirdPartyService].toInstance(mockThirdPartyService),
+          bind[AuditService].toInstance(mockAuditService),
+          bind[Clock].toInstance(fixedClock)
+        )
+        .build()
+
+      running(application) {
+        val request = FakeRequest(POST, routes.AddThirdPartyCheckYourAnswersController.onSubmit().url)
+        val result  = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual controllers.thirdparty.routes.ThirdPartyAddedConfirmationController
+          .onPageLoad()
+          .url
+        verify(mockAuditService, times(1)).auditThirdPartyAdded(any())(any())
+      }
+    }
+
   }
 }

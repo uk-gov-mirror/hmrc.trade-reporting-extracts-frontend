@@ -17,21 +17,26 @@
 package controllers.thirdparty
 
 import controllers.actions.*
-import models.{CompanyInformation, ConsentStatus, UserAnswers}
+import models.requests.DataRequest
+import models.thirdparty.*
+import models.{AlreadyAddedThirdPartyFlag, CompanyInformation, ConsentStatus, UserAnswers}
 import navigation.ThirdPartyNavigator
-import pages.thirdparty.{AddThirdPartyCheckYourAnswersPage, EoriNumberPage}
-
-import javax.inject.Inject
+import pages.thirdparty.*
 import play.api.i18n.{I18nSupport, Messages, MessagesApi}
+import play.api.libs.json.{JsObject, Json}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import services.TradeReportingExtractsService
+import repositories.SessionRepository
+import services.{AuditService, ThirdPartyService, TradeReportingExtractsService}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import viewmodels.checkAnswers.thirdparty.{BusinessInfoSummary, ThirdPartyAccessPeriodSummary, ThirdPartyDataOwnerConsentSummary, ThirdPartyReferenceSummary}
-import viewmodels.checkAnswers.thirdparty.{DataTheyCanViewSummary, DataTypesSummary, DeclarationDateSummary, EoriNumberSummary}
+import utils.DateTimeFormats.dateTimeFormat
+import utils.json.OptionalLocalDateReads.*
+import viewmodels.checkAnswers.thirdparty.*
 import viewmodels.govuk.all.SummaryListViewModel
 import views.html.thirdparty.AddThirdPartyCheckYourAnswersView
 
+import java.time.{Clock, LocalDate, ZoneOffset}
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class AddThirdPartyCheckYourAnswersController @Inject() (
@@ -43,7 +48,11 @@ class AddThirdPartyCheckYourAnswersController @Inject() (
   requireData: DataRequiredAction,
   val controllerComponents: MessagesControllerComponents,
   view: AddThirdPartyCheckYourAnswersView,
-  tradeReportingExtractsService: TradeReportingExtractsService
+  tradeReportingExtractsService: TradeReportingExtractsService,
+  thirdPartyService: ThirdPartyService,
+  sessionRepository: SessionRepository,
+  auditService: AuditService,
+  clock: Clock
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
@@ -67,9 +76,28 @@ class AddThirdPartyCheckYourAnswersController @Inject() (
     andThen getData
     andThen requireData
     andThen preventBackNavigationAfterAddThirdPartyAction).async { implicit request =>
-    Future.successful {
-      Redirect(navigator.nextPage(AddThirdPartyCheckYourAnswersPage, userAnswers = request.userAnswers))
-    }
+    for {
+      thirdPartyAddedConfirmation <- tradeReportingExtractsService.createThirdPartyAddRequest(
+                                       thirdPartyService.buildThirdPartyAddRequest(request.userAnswers, request.eori)
+                                     )
+
+      companyInfo            <- tradeReportingExtractsService.getCompanyInformation(request.userAnswers.get(EoriNumberPage).get)
+      maybeCompanyName        = resolveDisplayName(companyInfo)
+      _                      <- auditService.auditThirdPartyAdded(buildThirdPartyAddedAuditEvent(request, maybeCompanyName))
+      updatedAnswers          = AddThirdPartySection.removeAllAddThirdPartyAnswersAndNavigation(request.userAnswers)
+      updatedAnswersWithFlag <- Future.fromTry(updatedAnswers.set(AlreadyAddedThirdPartyFlag(), true))
+
+      submittedDate  = LocalDate.now(clock).format(dateTimeFormat()(messagesApi.preferred(request).lang))
+      submissionMeta = ThirdPartySubmissionMeta(
+                         thirdPartyEori = thirdPartyAddedConfirmation.thirdPartyEori,
+                         companyName = maybeCompanyName,
+                         submittedDate = submittedDate
+                       )
+
+      userAnswersWithMeta = updatedAnswersWithFlag.copy(submissionMeta = Some(Json.toJson(submissionMeta).as[JsObject]))
+      _                  <- sessionRepository.set(userAnswersWithMeta)
+
+    } yield Redirect(navigator.nextPage(AddThirdPartyCheckYourAnswersPage, userAnswers = request.userAnswers))
   }
 
   private def rowGenerator(answers: UserAnswers, maybeBusinessInfo: Option[String])(implicit
@@ -94,4 +122,46 @@ class AddThirdPartyCheckYourAnswersController @Inject() (
       case ConsentStatus.Denied => None
       case _                    => Some(companyInfo.name)
     }
+
+  private def buildThirdPartyAddedAuditEvent(
+    request: DataRequest[AnyContent],
+    maybeCompanyName: Option[String]
+  ): ThirdPartyAddedEvent = {
+    val userAnswers = request.userAnswers
+
+    ThirdPartyAddedEvent(
+      IsImporterExporterForDataToShare = userAnswers.get(ThirdPartyDataOwnerConsentPage).get,
+      thirdPartyEoriAccessGiven = userAnswers.get(ConfirmEoriPage).get match {
+        case ConfirmEori.Yes => true
+        case ConfirmEori.No  => false
+      },
+      thirdPartyGivenAccessAllData = userAnswers.get(DeclarationDatePage).get match {
+        case DeclarationDate.AllAvailableData => true
+        case DeclarationDate.CustomDateRange  => false
+      },
+      requesterEori = request.eori,
+      thirdPartyEori = userAnswers.get(EoriNumberPage).get,
+      thirdPartyBusinessInformation = maybeCompanyName,
+      thirdPartyReferenceName = userAnswers.get(ThirdPartyReferencePage),
+      thirdPartyAccessStart =
+        userAnswers.get(ThirdPartyAccessStartDatePage).get.atStartOfDay().toInstant(ZoneOffset.UTC).toString,
+      thirdPartyAccessEnd = userAnswers.get(ThirdPartyAccessEndDatePage) match {
+        case Some(Some(endDate)) => endDate.atStartOfDay().toInstant(ZoneOffset.UTC).toString
+        case _                   => "indefinite"
+      },
+      dataAccessType = userAnswers.get(DataTypesPage).get match {
+        case set if set.contains(DataTypes.Export) && set.contains(DataTypes.Import) => "import, export"
+        case set if set.contains(DataTypes.Export)                                   => "export"
+        case _                                                                       => "import"
+      },
+      thirdPartyDataStart = userAnswers.get(DataStartDatePage) match {
+        case None            => "all available data"
+        case Some(startDate) => startDate.atStartOfDay().toInstant(ZoneOffset.UTC).toString
+      },
+      thirdPartyDataEnd = userAnswers.get(DataEndDatePage) match {
+        case Some(Some(endDate)) => endDate.atStartOfDay().toInstant(ZoneOffset.UTC).toString
+        case _                   => "all available data"
+      }
+    )
+  }
 }

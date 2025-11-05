@@ -25,7 +25,7 @@
 
 @layout(pageTitle = titleNoForm(messages("checkYourAnswers.title")),
     breadcrumbContribution = Seq()) {
-    @formHelper(action = controllers.report.routes.CheckYourAnswersController.onSubmit(), Symbol("autoComplete") -> "off") {
+    @formHelper(action = controllers.report.routes.SubmitReportController.onSubmit, Symbol("autoComplete") -> "off") {
         <h1 class="govuk-heading-xl">@messages("checkYourAnswers.heading")</h1>
 
         @govukSummaryList(list)

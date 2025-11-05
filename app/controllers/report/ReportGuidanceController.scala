@@ -56,18 +56,22 @@ class ReportGuidanceController @Inject() (
         for {
           reportRequestNumberLimit <- tradeReportingExtractsService.getReportRequestLimitNumber
           answers                  <- Future.fromTry(request.userAnswers.remove(AlreadySubmittedFlag()))
-          updatedAnswers            = ReportRequestSection.removeAllReportRequestAnswersAndNavigation(answers)
-          _                        <- sessionRepository.set(updatedAnswers)
+          clearedAnswers            = ReportRequestSection.removeAllReportRequestAnswersAndNavigation(answers)
+          clearedWithMeta           = clearedAnswers.copy(submissionMeta = None)
+          _                        <- sessionRepository.set(clearedWithMeta)
           email                    <- tradeReportingExtractsService.getNotificationEmail(request.eori).map(_.address)
         } yield Ok(view(NormalMode, reportRequestNumberLimit, redirectUrl, email))
-      case initialPage.url                                                                          =>
+
+      case initialPage.url =>
         for {
           reportRequestNumberLimit <- tradeReportingExtractsService.getReportRequestLimitNumber
-          updatedAnswers           <- Future.fromTry(request.userAnswers.remove(AlreadySubmittedFlag()))
-          _                        <- sessionRepository.set(updatedAnswers)
+          answers                  <- Future.fromTry(request.userAnswers.remove(AlreadySubmittedFlag()))
+          clearedWithMeta           = answers.copy(submissionMeta = None)
+          _                        <- sessionRepository.set(clearedWithMeta)
           email                    <- tradeReportingExtractsService.getNotificationEmail(request.eori).map(_.address)
         } yield Ok(view(NormalMode, reportRequestNumberLimit, redirectUrl, email))
-      case _                                                                                        =>
+
+      case _ =>
         Future.successful(Redirect(ReportRequestSection().navigateTo(request.userAnswers)))
     }
   }

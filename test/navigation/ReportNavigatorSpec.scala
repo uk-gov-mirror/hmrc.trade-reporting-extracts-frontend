@@ -260,14 +260,6 @@ class ReportNavigatorSpec extends SpecBase with MockitoSugar {
           ) mustBe controllers.problem.routes.JourneyRecoveryController.onPageLoad()
         }
       }
-
-      "navigate from CheckYourAnswersPage to RequestConfirmationPage" in {
-        navigator.nextPage(
-          CheckYourAnswersPage,
-          NormalMode,
-          emptyUserAnswers
-        ) mustBe routes.RequestConfirmationController.onPageLoad()
-      }
     }
 
     "in Check mode" - {

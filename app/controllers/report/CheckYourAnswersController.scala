@@ -19,10 +19,9 @@ package controllers.report
 import com.google.inject.Inject
 import config.FrontendAppConfig
 import controllers.BaseController
-import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction, MissingDependentAnswersAction, PreventBackNavigationAfterSubmissionAction}
+import controllers.actions.*
 import models.report.ReportTypeImport
 import navigation.ReportNavigator
-import pages.report.CheckYourAnswersPage
 import play.api.i18n.MessagesApi
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.TradeReportingExtractsService
@@ -94,16 +93,6 @@ class CheckYourAnswersController @Inject() (appConfig: FrontendAppConfig)(
           val list                              = SummaryListViewModel(rows = rows.flatten)
           Ok(view(list))
         }
-    }
-  }
-
-  def onSubmit(): Action[AnyContent] = (identify
-    andThen getData
-    andThen requireData
-    andThen preventBackNavigationAfterSubmissionAction
-    andThen missingDependentAnswersAction).async { implicit request =>
-    Future.successful {
-      Redirect(navigator.nextPage(CheckYourAnswersPage, userAnswers = request.userAnswers))
     }
   }
 }

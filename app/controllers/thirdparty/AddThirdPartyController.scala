@@ -47,14 +47,16 @@ class AddThirdPartyController @Inject() (
     request.userAnswers.get(AddThirdPartySection().sectionNavigation).getOrElse(initialPage.url) match {
       case url if url == JourneyRecoveryUrl || (url == checkYourAnswersUrl && alreadyAddedThirdPartyFlag) =>
         for {
-          answers       <- Future.fromTry(request.userAnswers.remove(AlreadyAddedThirdPartyFlag()))
-          updatedAnswers = AddThirdPartySection.removeAllAddThirdPartyAnswersAndNavigation(answers)
-          _             <- sessionRepository.set(updatedAnswers)
+          answers        <- Future.fromTry(request.userAnswers.remove(AlreadyAddedThirdPartyFlag()))
+          clearedAnswers  = AddThirdPartySection.removeAllAddThirdPartyAnswersAndNavigation(answers)
+          clearedWithMeta = clearedAnswers.copy(submissionMeta = None)
+          _              <- sessionRepository.set(clearedWithMeta)
         } yield Ok(view())
       case initialPage.url                                                                                =>
         for {
-          updatedAnswers <- Future.fromTry(request.userAnswers.remove(AlreadyAddedThirdPartyFlag()))
-          _              <- sessionRepository.set(updatedAnswers)
+          answers        <- Future.fromTry(request.userAnswers.remove(AlreadyAddedThirdPartyFlag()))
+          clearedWithMeta = answers.copy(submissionMeta = None)
+          _              <- sessionRepository.set(clearedWithMeta)
         } yield Ok(view())
       case _                                                                                              =>
         Future.successful(Redirect(AddThirdPartySection().navigateTo(request.userAnswers)))

@@ -56,24 +56,6 @@ class CheckYourAnswersControllerSpec extends SpecBase {
       }
     }
 
-    "must redirect to the next page for a POST" in {
-      val userAnswers =
-        emptyUserAnswers.set(sectionNav, "/request-customs-declaration-data/check-your-answers").success.value
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
-
-      running(application) {
-        val request = FakeRequest(POST, report.routes.CheckYourAnswersController.onSubmit().url)
-
-        val result = route(application, request).value
-
-        status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual controllers.report.routes.RequestConfirmationController
-          .onPageLoad()
-          .url
-      }
-    }
-
     "must hide DecisionSummary when thirdPartyEori and dataTypes is only exports" in {
       val sectionNav     = SectionNavigation("reportRequestSection")
       val thirdPartyEori = "GB123456789000"

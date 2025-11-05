@@ -56,7 +56,6 @@ GET        /change-end-date                        controllers.report.CustomRequ
 POST       /change-end-date                         controllers.report.CustomRequestEndDateController.onSubmit(mode: Mode = CheckMode)
 
 GET        /check-your-answers        controllers.report.CheckYourAnswersController.onPageLoad()
-POST       /check-your-answers        controllers.report.CheckYourAnswersController.onSubmit()
 
 GET        /report-request-confirmation                   controllers.report.RequestConfirmationController.onPageLoad()
 GET        /requested-reports                             controllers.report.RequestedReportsController.onPageLoad()
@@ -73,4 +72,4 @@ POST       /change-check-new-email                  controllers.report.CheckNewE
 
 GET        /export-item-report                       controllers.report.ExportItemReportController.onPageLoad()
 GET        /request-not-completed                       controllers.report.RequestNotCompletedController.onPageLoad()
-
+POST       /submit-report                            controllers.report.SubmitReportController.onSubmit
