@@ -18,8 +18,8 @@ package controllers.report
 
 import controllers.actions.*
 import models.AlreadySubmittedFlag
-import models.report.{ReportConfirmation, ReportRequestSection, SubmissionMeta}
-import play.api.i18n.{Messages, MessagesApi}
+import models.report.{ReportRequestSection, SubmissionMeta}
+import play.api.i18n.MessagesApi
 import play.api.libs.json.{JsObject, Json}
 import play.api.mvc.Results.Redirect
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request}
