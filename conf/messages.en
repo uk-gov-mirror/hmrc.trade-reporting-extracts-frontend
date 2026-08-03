@@ -248,8 +248,9 @@ requestConfirmation.goToHomepage = Go to homepage
 requestConfirmation.feedbackLink = What did you think of this service?
 requestConfirmation.feedbackDuration = (takes 30 seconds)
 
-newEmailNotification.title = Which email should receive notifications?
-newEmailNotification.heading = Which email should receive notifications?
+newEmailNotification.title = Email notifications
+newEmailNotification.heading = Email notifications
+newEmailNotification.heading2 = Which email should receive notifications?
 newEmailNotification.checkYourAnswersLabel = New notification email
 newEmailNotification.error.required = Enter a new email address to receive notifications
 newEmailNotification.error.length =  Enter a new email address not greater than 100 characters
@@ -771,8 +772,9 @@ additionalEmail.button.add = Add another email address
 additionalEmail.remove = Remove
 additionalEmail.limitReached = You have reached your additional email limit.
 
-newAdditionalEmail.title = What email address do you want to add?
-newAdditionalEmail.heading = What email address do you want to add?
+newAdditionalEmail.title = Add new email address
+newAdditionalEmail.heading = Add new email address
+newAdditionalEmail.heading2 = What email address do you want to add?
 newAdditionalEmail.message = We will only use this email to contact the person when your reports are ready to download. Only add an email address if you have consent from this person to receive these notifications.
 newAdditionalEmail.error.required = Enter the email address you want to add
 newAdditionalEmail.error.invalidFormat = Enter a new email address in the correct format, like name@example.com

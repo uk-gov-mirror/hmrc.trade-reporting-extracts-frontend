@@ -248,8 +248,9 @@ requestConfirmation.goToHomepage = Ewch i’r hafan
 requestConfirmation.feedbackLink = Beth oedd eich barn am y gwasanaeth hwn?
 requestConfirmation.feedbackDuration = (mae’n cymryd 30 eiliad)
 
-newEmailNotification.title = I ba gyfeiriad e-bost yr hoffech i ni anfon hysbysiadau?
-newEmailNotification.heading = I ba gyfeiriad e-bost yr hoffech i ni anfon hysbysiadau?
+newEmailNotification.title = Hysbysiadau drwy e-bost
+newEmailNotification.heading = Hysbysiadau drwy e-bost
+newEmailNotification.heading2 = I ba gyfeiriad e-bost yr hoffech i ni anfon hysbysiadau?
 newEmailNotification.checkYourAnswersLabel = E-bost newydd ar gyfer hysbysiadau
 newEmailNotification.error.required = Nodwch gyfeiriad e-bost newydd i anfon hysbysiadau iddo
 newEmailNotification.error.length = Nodwch gyfeiriad e-bost newydd sydd ddim mwy na 100 o gymeriadau
@@ -771,8 +772,9 @@ additionalEmail.button.add = Ychwanegu cyfeiriad e-bost arall
 additionalEmail.remove = Dileu
 additionalEmail.limitReached = Nid oes modd i chi nodi rhagor o e-byst ychwanegol.
 
-newAdditionalEmail.title = Pa gyfeiriad e-bost yr hoffech ei ychwanegu?
-newAdditionalEmail.heading = Pa gyfeiriad e-bost yr hoffech ei ychwanegu?
+newAdditionalEmail.title = Ychwanegu cyfeiriad e-bost newydd
+newAdditionalEmail.heading = Ychwanegu cyfeiriad e-bost newydd
+newAdditionalEmail.heading2 = Pa gyfeiriad e-bost yr hoffech ei ychwanegu?
 newAdditionalEmail.message = Dim ond i gysylltu â’r person dan sylw pan fydd eich adroddiad yn barod i’w lawrlwytho y byddwn yn defnyddio’r e-bost hwn. Dim ond os oes gennych ganiatâd gan y person dan sylw i gael yr hysbysiadau hyn y dylech ychwanegu cyfeiriad e-bost.
 newAdditionalEmail.error.required = Nodwch y cyfeiriad e-bost yr hoffech ei ychwanegu
 newAdditionalEmail.error.invalidFormat = Nodwch gyfeiriad e-bost newydd yn y fformat cywir, er enghraifft enw@enghraifft.com

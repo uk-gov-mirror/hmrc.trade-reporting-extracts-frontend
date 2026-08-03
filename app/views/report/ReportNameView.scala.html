@@ -27,20 +27,6 @@
 
 @(form: Form[_], mode: Mode, isMoreThanOneReport: Boolean)(implicit request: Request[_], messages: Messages)
 
-@heading = {
-    @govukLabel(
-    LabelViewModel(if(isMoreThanOneReport) messages("reportName.pluralReport.heading")
-                    else messages("reportName.singleReport.heading")
-                ).forAttr("value").asPageHeading()
-            )
-    }
-
-@guidanceContent = {
-    <p class="govuk-body">
-        @messages("reportName.hint")
-    </p>
-}
-
 @layout(pageTitle = title(form, if(isMoreThanOneReport) messages("reportName.pluralReport.title")
             else messages("reportName.singleReport.title"))) {
 
@@ -49,15 +35,20 @@
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form))
         }
-        @heading
-        @guidanceContent
-        @govukInput(
+
+        @{
+            val heading = LabelViewModel(if(isMoreThanOneReport) messages("reportName.pluralReport.heading")
+                else messages("reportName.singleReport.heading")
+            ).forAttr("value").asPageHeading()
+
+            govukInput(
             InputViewModel(
                 field = form("value"),
-                label = Label()
-            )
-            .withWidth(TwoThirds)
-        )
+                label = heading
+            ).withHint(HintViewModel(messages("reportName.hint")))
+            .withWidth(TwoThirds))
+
+        }
 
         @govukButton(
             ButtonViewModel(messages("site.continue"))

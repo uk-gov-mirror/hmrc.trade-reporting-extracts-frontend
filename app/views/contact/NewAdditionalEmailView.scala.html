@@ -29,10 +29,15 @@
 @content = {
     <p class="govuk-body">@messages("newAdditionalEmail.message")</p>
 }
-@heading = {
-    @govukLabel(
-        LabelViewModel(messages("newAdditionalEmail.heading")).forAttr("value").asPageHeading()
-    )
+
+@heading2 = {
+    <h2 class="govuk-label-wrapper"><label class="govuk-label  govuk-label--l" for="value">
+        @messages("newAdditionalEmail.heading2")
+        </label> </h2>
+}
+
+@heading1 = {
+    <h1 class="govuk-heading-xl govuk-!-margin-top-0 govuk-!-margin-bottom-2">@messages("newAdditionalEmail.heading")</h1>
 }
 
 @layout(pageTitle = title(form, messages("newAdditionalEmail.title"))) {
@@ -42,8 +47,10 @@
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form))
         }
-        @heading
+        @heading1
         @content
+        @heading2
+
         @govukInput(
             InputViewModel(
                 field = form("value"),

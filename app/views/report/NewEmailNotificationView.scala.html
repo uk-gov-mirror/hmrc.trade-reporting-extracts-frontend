@@ -37,10 +37,14 @@
     }
 }
 
-@heading = {
-    @govukLabel(
-        LabelViewModel(messages("newEmailNotification.heading")).forAttr("value").asPageHeading()
-    )
+@heading2 = {
+    <h2 class="govuk-label-wrapper"><label class="govuk-label  govuk-label--l" for="value">
+        @messages("newEmailNotification.heading2")
+        </label> </h2>
+}
+
+@heading1 = {
+    <h1 class="govuk-heading-xl govuk-!-margin-top-0 govuk-!-margin-bottom-2">@messages("newEmailNotification.heading")</h1>
 }
 
 @layout(pageTitle = title(form, messages("newEmailNotification.title"))) {
@@ -50,8 +54,9 @@
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form))
         }
-        @heading
+        @heading1
         @guidanceContent
+        @heading2
         @govukInput(
             InputViewModel(
                 field = form("value"),
