@@ -459,8 +459,7 @@ confirmEori.businessName = Enw’r busnes
 
 thirdPartyAccessStartDate.title = Pryd hoffech fod y cyfnod o fynediad yn dechrau?
 thirdPartyAccessStartDate.heading = Pryd hoffech fod y cyfnod o fynediad yn dechrau?
-thirdPartyAccessStartDate.message = Gallwch nodi dyddiad heddiw neu ddewis dyddiad yn y dyfodol.
-thirdPartyAccessStartDate.hint = Er enghraifft, {0}.
+thirdPartyAccessStartDate.hint = Gallwch nodi dyddiad heddiw neu ddewis dyddiad yn y dyfodol. Er enghraifft, {0}.
 thirdPartyAccessStartDate.error.required.all = Nodwch ddyddiad dechrau’r cyfnod hwn o fynediad
 thirdPartyAccessStartDate.error.required.two = Mae’n rhaid i ddyddiad dechrau’r cyfnod hwn o fynediad gynnwys {0} a {1}
 thirdPartyAccessStartDate.error.required = Mae’n rhaid i ddyddiad dechrau’r cyfnod hwn o fynediad gynnwys {0}
@@ -473,9 +472,10 @@ thirdPartyAccessPeriod.fixed.answerLabel = {0} i {1}
 thirdPartyAccessPeriod.ongoing.answerLabel = O {0} i bresennol
 thirdPartyAccessPeriod.change.hidden = Cyfnod o fynediad trydydd parti
 
-thirdPartyAccessEndDate.title = Pryd hoffech fod y cyfnod hwn o fynediad yn dod i ben? (dewisol)
-thirdPartyAccessEndDate.heading = Pryd hoffech fod y cyfnod hwn o fynediad yn dod i ben? (dewisol)
-thirdPartyAccessEndDate.message = Gwnaethoch nodi {0} fel dyddiad dechrau. Gadewch yn wag ar gyfer cyfnodau o fynediad presennol, gallwch ddiweddaru hyn yn nes ymlaen.
+thirdPartyAccessEndDate.title = Dyddiad dod â mynediad i ben
+thirdPartyAccessEndDate.heading = Dyddiad dod â mynediad i ben
+thirdPartyAccessEndDate.heading2 = Pryd hoffech fod y cyfnod hwn o fynediad yn dod i ben? (dewisol)
+thirdPartyAccessEndDate.message = Gwnaethoch nodi {0} fel dyddiad dechrau. Gall mynediad eich trydydd parti ddod i ben ar unrhyw ddyddiad o {0} hyd at ddyddiad heddiw. Gadewch yn wag ar gyfer cyfnodau o fynediad presennol, gallwch ddiweddaru hyn yn nes ymlaen.
 thirdPartyAccessEndDate.hint = Er enghraifft, {0}.
 thirdPartyAccessEndDate.error.required.two = Mae’n rhaid i ddyddiad dod i ben y cyfnod hwn o fynediad gynnwys {0} a {1}
 thirdPartyAccessEndDate.error.required = Mae’n rhaid i ddyddiad dod i ben y cyfnod hwn o fynediad gynnwys {0}
@@ -696,17 +696,17 @@ editThirdPartyReference.message = Ychwanegwch enw i’w ddefnyddio wrth gyfeirio
 
 editThirdPartyAccessStartDate.title = Pryd hoffech fod y cyfnod o fynediad yn dechrau?
 editThirdPartyAccessStartDate.heading = Pryd hoffech fod y cyfnod o fynediad yn dechrau?
-editThirdPartyAccessStartDate.message = Gallwch nodi dyddiad heddiw neu ddewis dyddiad yn y dyfodol.
-editThirdPartyAccessStartDate.hint = Er enghraifft, {0}.
+editThirdPartyAccessStartDate.hint = Gallwch nodi dyddiad heddiw neu ddewis dyddiad yn y dyfodol. Er enghraifft, {0}.
 editThirdPartyAccessStartDate.error.required.all =  Nodwch ddyddiad dechrau’r cyfnod hwn o fynediad
 editThirdPartyAccessStartDate.error.required.two = Mae’n rhaid i ddyddiad dechrau’r cyfnod hwn o fynediad gynnwys {0} a {1}
 editThirdPartyAccessStartDate.error.required = Mae’n rhaid i ddyddiad dechrau’r cyfnod hwn o fynediad gynnwys {0}
 editThirdPartyAccessStartDate.error.invalid = Mae’n rhaid i ddyddiad dechrau’r cyfnod hwn o fynediad fod yn ddyddiad go iawn a dim ond cynnwys y rhifau 0 i 9
 editThirdPartyAccessStartDate.error.min = Mae’n rhaid i ddyddiad dechrau’r cyfnod hwn o fynediad fod yn heddiw neu’n ddyddiad yn y dyfodol
 
-editThirdPartyAccessEndDate.title = Pryd hoffech fod y cyfnod hwn o fynediad yn dod i ben? (dewisol)
-editThirdPartyAccessEndDate.heading = Pryd hoffech fod y cyfnod hwn o fynediad yn dod i ben? (dewisol)
-editThirdPartyAccessEndDate.message =  Gwnaethoch nodi {0} fel dyddiad dechrau. Gadewch yn wag ar gyfer cyfnodau o fynediad presennol, gallwch ddiweddaru hyn yn nes ymlaen.
+editThirdPartyAccessEndDate.title = Dyddiad dod â mynediad i ben
+editThirdPartyAccessEndDate.heading = Dyddiad dod â mynediad i ben
+editThirdPartyAccessEndDate.heading2 = Pryd hoffech fod y cyfnod ar gyfer y mynediad hwn yn dod i ben? (dewisol)
+editThirdPartyAccessEndDate.message = Gwnaethoch nodi {0} fel dyddiad dechrau. Gall mynediad eich trydydd parti ddod i ben ar unrhyw ddyddiad o {0} hyd at ddyddiad heddiw. Gadewch yn wag ar gyfer cyfnodau o fynediad presennol, gallwch ddiweddaru hyn yn nes ymlaen.
 editThirdPartyAccessEndDate.hint = Er enghraifft, 27 12 2025.
 editThirdPartyAccessEndDate.error.required.two = Mae’n rhaid i ddyddiad dod i ben y cyfnod hwn o fynediad gynnwys {0} a {1}
 editThirdPartyAccessEndDate.error.required = Mae’n rhaid i ddyddiad dod i ben y cyfnod hwn o fynediad gynnwys {0}

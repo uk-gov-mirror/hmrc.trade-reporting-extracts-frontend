@@ -34,6 +34,10 @@
 <p class="govuk-body govuk-!-margin-bottom-0">@messages("thirdPartyAccessEndDate.message", startDateString)</p>
 }
 
+@legendHeading = {
+<h2 class="govuk-heading-l govuk-!-margin-top-4 govuk-!-margin-bottom-2">@messages("thirdPartyAccessEndDate.heading2")</h2>
+}
+
 
 @layout(pageTitle = title(form, messages("thirdPartyAccessEndDate.title"))) {
 
@@ -47,7 +51,7 @@
         @govukDateInput(
             DateViewModel(
                 field  = form("value"),
-                legend = Legend()
+                legend = LegendViewModel(HtmlContent(legendHeading)),
             )
             .withHint(HintViewModel(HtmlContent(contentHint)))
         )

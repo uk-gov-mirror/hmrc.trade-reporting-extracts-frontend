@@ -32,6 +32,11 @@
 @heading = {
     <h1 class="govuk-heading-xl govuk-!-margin-top-0 govuk-!-margin-bottom-2">@messages("editThirdPartyAccessEndDate.heading")</h1>
 }
+
+@legendHeading = {
+<h2 class="govuk-heading-l govuk-!-margin-top-4 govuk-!-margin-bottom-2">@messages("editThirdPartyAccessEndDate.heading2")</h2>
+}
+
 @layout(pageTitle = title(form, messages("editThirdPartyAccessEndDate.title"))) {
 
     @formHelper(action = controllers.editThirdParty.routes.EditThirdPartyAccessEndDateController.onSubmit(thirdPartyEori), Symbol("autoComplete") -> "off") {
@@ -44,7 +49,7 @@
         @govukDateInput(
             DateViewModel(
                 field  = form("value"),
-                legend = Legend()
+                legend = legend = LegendViewModel(messages("editThirdPartyAccessEndDate.heading2")).asPageHeading(),
             ).withHint(HintViewModel(HtmlContent(contentHint)))
         )
 

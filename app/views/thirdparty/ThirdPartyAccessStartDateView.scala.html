@@ -27,12 +27,6 @@
 @contentHint = {
     <p class="govuk-hint">@messages("thirdPartyAccessStartDate.hint", date)</p>
 }
-@guidanceContent = {
-    <p class="govuk-body govuk-!-margin-bottom-0">@messages("thirdPartyAccessStartDate.message")</p>
-}
-@heading = {
-<h1 class="govuk-heading-xl govuk-!-margin-top-0 govuk-!-margin-bottom-2">@messages("thirdPartyAccessStartDate.heading")</h1>
-}
 
 @layout(pageTitle = title(form, messages("thirdPartyAccessStartDate.title"))) {
 
@@ -41,12 +35,11 @@
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form, errorLinkOverrides = Map("value" -> "value.day")))
         }
-        @heading
-        @guidanceContent
+
         @govukDateInput(
             DateViewModel(
                 field  = form("value"),
-                legend = Legend()
+                legend = LegendViewModel(messages("thirdPartyAccessStartDate.heading")).asPageHeading()
             )
             .withHint(HintViewModel(HtmlContent(contentHint)))
         )
