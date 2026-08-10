@@ -474,7 +474,7 @@ thirdPartyAccessPeriod.change.hidden = Cyfnod o fynediad trydydd parti
 
 thirdPartyAccessEndDate.title = Dyddiad dod â mynediad i ben
 thirdPartyAccessEndDate.heading = Dyddiad dod â mynediad i ben
-thirdPartyAccessEndDate.heading2 = Pryd hoffech fod y cyfnod hwn o fynediad yn dod i ben? (dewisol)
+thirdPartyAccessEndDate.heading2 = Pryd hoffech fod y cyfnod ar gyfer y mynediad hwn yn dod i ben? (dewisol)
 thirdPartyAccessEndDate.message = Gwnaethoch nodi {0} fel dyddiad dechrau. Gall mynediad eich trydydd parti ddod i ben ar unrhyw ddyddiad o {0} hyd at ddyddiad heddiw. Gadewch yn wag ar gyfer cyfnodau o fynediad presennol, gallwch ddiweddaru hyn yn nes ymlaen.
 thirdPartyAccessEndDate.hint = Er enghraifft, {0}.
 thirdPartyAccessEndDate.error.required.two = Mae’n rhaid i ddyddiad dod i ben y cyfnod hwn o fynediad gynnwys {0} a {1}
