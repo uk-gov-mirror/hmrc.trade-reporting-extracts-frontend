@@ -27,18 +27,6 @@
 
 @(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
-@content = {
-<p class="govuk-body">@messages("eoriNumber.hint")</p>
-}
-@hint = {
-<p class="govuk-hint">@messages("eoriNumber.example")</p>
-}
-@heading = {
-@govukLabel(
-LabelViewModel(messages("eoriNumber.heading")).forAttr("value").asPageHeading()
-)
-}
-
 @layout(pageTitle = title(form, messages("eoriNumber.title"))) {
 
     @formHelper(action = controllers.thirdparty.routes.EoriNumberController.onSubmit(mode)) {
@@ -46,15 +34,18 @@ LabelViewModel(messages("eoriNumber.heading")).forAttr("value").asPageHeading()
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form))
         }
-        @heading
-        @content
-        @govukInput(
+
+        @{
+            val heading = LabelViewModel(messages("eoriNumber.heading")).forAttr("value").asPageHeading()
+
+            govukInput(
             InputViewModel(
                 field = form("value"),
-                label = Label()
-            )
-            .withWidth(TwoThirds).withHint(HintViewModel(HtmlContent(hint)))
-        )
+                label = heading
+            ).withHint(HintViewModel(messages("eoriNumber.hint")))
+            .withWidth(TwoThirds))
+
+        }
 
         @govukButton(
             ButtonViewModel(messages("site.continue"))

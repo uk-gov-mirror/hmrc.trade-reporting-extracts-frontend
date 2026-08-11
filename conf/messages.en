@@ -380,8 +380,7 @@ eoriNumber.error.invalidEori = The EORI number you want to give access to must s
 eoriNumber.error.notFound = This EORI number does not exist. Enter a real EORI number
 eoriNumber.error.cannotBeOwnEori = You cannot give access to your own EORI number
 eoriNumber.change.hidden = EORI number you want to give access to
-eoriNumber.hint = You can only enter an EORI number starting GB. To give third-party access to a XI EORI number, enter the corresponding GB EORI.
-eoriNumber.example = For example, GB123456123456.
+eoriNumber.hint = You can only enter a 12 digit EORI number starting GB. To give third-party access to a XI EORI number, enter the corresponding GB EORI.
 
 noPermission.title = You do not have permission to access this service
 noPermission.heading = You do not have permission to access this service
