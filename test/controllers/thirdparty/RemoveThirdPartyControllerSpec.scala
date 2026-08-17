@@ -66,7 +66,7 @@ class RemoveThirdPartyControllerSpec extends SpecBase with MockitoSugar {
 
       val mockSessionRepository             = mock[SessionRepository]
       val mockTradeReportingExtractsService = mock[TradeReportingExtractsService]
-      val notificationEmail                 = NotificationEmail("test@example.com", LocalDateTime.now())
+      val notificationEmail                 = NotificationEmail("test@example.com", LocalDateTime.now(), false)
 
       when(mockTradeReportingExtractsService.getNotificationEmail(any())(any()))
         .thenReturn(Future.successful(notificationEmail))

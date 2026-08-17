@@ -19,56 +19,114 @@
         appConfig: FrontendAppConfig,
         layout: templates.Layout)
 
-@(companyInformation: CompanyInformation, eori: String, emailAddress: String, additionalEmails: Seq[String], guidanceUrl: String)(implicit request: Request[_], messages: Messages)
+@(companyInformation: CompanyInformation,
+eori: String, emailAddress: String,
+additionalEmails: Seq[String],
+guidanceUrl: String,
+inactiveEori: Boolean,
+emailNotFound: Boolean
+)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = titleNoForm(messages("contactDetails.title"))) {
+@happyPathContent = {
 
     <h1 class="govuk-heading-xl">@messages("contactDetails.heading")</h1>
     <p class="govuk-body">@messages("contactDetails.intro")</p>
     <dl class="govuk-summary-list">
-     <div class="govuk-summary-list__row">
-      <dt class="govuk-summary-list__key">@messages("contactDetails.name")</dt>
-      <dd class="govuk-summary-list__value">@companyInformation.name</dd>
-     </div>
-     <div class="govuk-summary-list__row">
-      <dt class="govuk-summary-list__key">@messages("contactDetails.eoriNumber")</dt>
-      <dd class="govuk-summary-list__value">@eori </dd>
-     </div>
-     <div class="govuk-summary-list__row">
-      <dt class="govuk-summary-list__key">@messages("contactDetails.email")</dt>
-      <dd class="govuk-summary-list__value">@emailAddress </dd>
-     </div>
+        <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">@messages("contactDetails.name")</dt>
+            <dd class="govuk-summary-list__value">@companyInformation.name</dd>
+        </div>
+        <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">@messages("contactDetails.eoriNumber")</dt>
+            <dd class="govuk-summary-list__value">@eori </dd>
+        </div>
+        <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">@messages("contactDetails.email")</dt>
+            <dd class="govuk-summary-list__value">@emailAddress </dd>
+        </div>
     </dl>
 
     <p class="govuk-body">@messages("contactDetails.p2")
-        <a class="govuk-link" href="@guidanceUrl" rel="noreferrer noopener" target="_blank">@messages("contactDetails.p2.link")</a>
+        <a class="govuk-link" href="@guidanceUrl" rel="noreferrer noopener" target="_blank">@messages("contactDetails.p2.link")</a>.
+    </p>
+}
+
+@inactiveEoriContent = {
+
+    <h1 class="govuk-heading-xl">@messages("contactDetails.inactiveEori.heading")</h1>
+
+    <p class="govuk-body">@messages("contactDetails.inactiveEori.message1")</p>
+
+    <p class="govuk-body">@messages("contactDetails.inactiveEori.message2")</p>
+
+}
+
+@noEmailFoundContent = {
+
+    <h1 class="govuk-heading-xl">@messages("contactDetails.heading")</h1>
+
+    <p class="govuk-body">@messages("contactDetails.noEmailFound.message1")</p>
+
+    <p class="govuk-body">@messages("contactDetails.noEmailFound.message2")
+        <a class="govuk-link" href="@guidanceUrl" rel="noreferrer noopener" target="_blank">@messages("contactDetails.noEmailFound.link")</a>.
     </p>
 
-    <h2 class="govuk-heading-l">@messages("additionalEmail.title")</h2>
-    <div class="govuk-body">
+}
+
+@additionalEmailsContent = {
+
+<h2 class="govuk-heading-l">@messages("additionalEmail.title")</h2>
+<div class="govuk-body">
     <p>@messages("additionalEmail.body")</p>
     @if(additionalEmails.nonEmpty) {
-        <dl class="govuk-summary-list">
-            @for((email, idx) <- additionalEmails.zipWithIndex) {
-            <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">@email</dt>
-                <dd class="govuk-summary-list__actions">
-                    <ul class="govuk-summary-list__actions-list">
-                        <li class="govuk-summary-list__actions-list-item">
-                            <a class="govuk-link" href="@controllers.contact.routes.EmailRemovedController.onPageLoad(email).url">@messages("additionalEmail.remove")<span class="govuk-visually-hidden">@email</span></a>
-                        </li>
-                    </ul>
-                </dd>
-            </div>
-            }
-        </dl>
+    <dl class="govuk-summary-list">
+        @for((email, idx) <- additionalEmails.zipWithIndex) {
+        <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">@email</dt>
+            <dd class="govuk-summary-list__actions">
+                <ul class="govuk-summary-list__actions-list">
+                    <li class="govuk-summary-list__actions-list-item">
+                        <a class="govuk-link" href="@controllers.contact.routes.EmailRemovedController.onPageLoad(email).url">@messages("additionalEmail.remove")<span class="govuk-visually-hidden">@email</span></a>
+                    </li>
+                </ul>
+            </dd>
+        </div>
+        }
+    </dl>
     }
 
-        @if(additionalEmails.size < appConfig.additionalEmailLimit) {
+    @if(additionalEmails.size < appConfig.additionalEmailLimit) {
 
-        <a class="govuk-link" href="@controllers.contact.routes.NewAdditionalEmailController.onPageLoad().url">@messages("additionalEmail.button.add")</a>
-        }else{
-            <p class="govuk-body">@messages("additionalEmail.limitReached")</p>
-        }
-    </div>
+    <a class="govuk-link" href="@controllers.contact.routes.NewAdditionalEmailController.onPageLoad().url">@messages("additionalEmail.button.add")</a>
+    }else{
+    <p class="govuk-body">@messages("additionalEmail.limitReached")</p>
+    }
+</div>
 }
+
+@if(inactiveEori) {
+
+@layout(pageTitle = titleNoForm(messages("contactDetails.inactiveEori.title"))) {
+
+@inactiveEoriContent
+@additionalEmailsContent
+
+    }
+} else if (emailNotFound) {
+
+@layout(pageTitle = titleNoForm(messages("contactDetails.title"))) {
+
+@noEmailFoundContent
+@additionalEmailsContent
+
+    }
+} else {
+
+@layout(pageTitle = titleNoForm(messages("contactDetails.title"))) {
+
+@happyPathContent
+@additionalEmailsContent
+
+    }
+}
+

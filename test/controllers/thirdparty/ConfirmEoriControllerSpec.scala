@@ -50,8 +50,8 @@ class ConfirmEoriControllerSpec extends SpecBase with MockitoSugar {
   val mockSessionRepository: SessionRepository                         = mock[SessionRepository]
 
   val eoriNumber                                 = "GB123456789000"
-  val companyInfo: CompanyInformation            = CompanyInformation("Test Company", ConsentStatus.Denied)
-  val companyInfoWithConsent: CompanyInformation = CompanyInformation("Test Company", ConsentStatus.Granted)
+  val companyInfo: CompanyInformation            = CompanyInformation("Test Company", ConsentStatus.Denied, false)
+  val companyInfoWithConsent: CompanyInformation = CompanyInformation("Test Company", ConsentStatus.Granted, false)
 
   "ConfirmEori Controller" - {
 

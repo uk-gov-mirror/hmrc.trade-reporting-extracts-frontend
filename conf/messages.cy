@@ -75,10 +75,17 @@ contactDetails.title = Eich manylion cyswllt
 contactDetails.heading = Eich manylion cyswllt
 contactDetails.intro = Dyma’r manylion cyswllt y gwnaethoch roi i ni pan wnaethoch gofrestru ar gyfer eich rhif EORI.
 contactDetails.p2 = Gallwch
-contactDetails.p2.link = ddiweddaru’r cyfeiriad e-bost rydym yn ei ddefnyddio ar gyfer eich negeseuon a hysbysiadau’r tollau.
+contactDetails.p2.link = ddiweddaru’r cyfeiriad e-bost rydym yn ei ddefnyddio ar gyfer eich negeseuon a hysbysiadau’r tollau
 contactDetails.name = Enw
 contactDetails.eoriNumber = Rhif EORI
 contactDetails.email = Cyfeiriad e-bost
+contactDetails.inactiveEori.title = Nid yw eich rhif EORI yn weithredol
+contactDetails.inactiveEori.heading = Nid yw eich rhif EORI yn weithredol
+contactDetails.inactiveEori.message1 = Nid ydym yn gallu dangos eich manylion cyswllt oherwydd nid yw’ch rhif EORI yn weithredol. Gallai hyn fod o ganlyniad i newid o ran cofrestriad TAW.
+contactDetails.inactiveEori.message2 = I weld eich manylion wedi’u diweddaru, mewngofnodwch gan ddefnyddio Dynodydd Porth y Llywodraeth sydd wedi’i gysylltu â rhif EORI gweithredol.
+contactDetails.noEmailFound.message1 = Nid ydym yn gallu dangos eich cyfeiriad e-bost cofrestredig gan nad oes cyfeiriad e-bost wedi’i gadarnhau.
+contactDetails.noEmailFound.message2 = Gallwch
+contactDetails.noEmailFound.link = ddiweddaru’r prif gyfeiriad e-bost yr ydych am ei ddefnyddio
 
 unauthorisedCdsEnrolment.title = Nid yw’ch cyfrif wedi’i danysgrifio i’r Gwasanaeth Datganiadau Tollau (CDS)
 unauthorisedCdsEnrolment.heading = Nid yw’ch cyfrif wedi’i danysgrifio i’r Gwasanaeth Datganiadau Tollau (CDS)
@@ -766,7 +773,7 @@ thirdPartyUpdatedConfirmation.link1 = reoli pa drydydd parti sydd â mynediad at
 thirdPartyUpdatedConfirmation.link2 = Ewch i’r hafan
 
 additionalEmail.title = Cyfeiriadau e-bost eilaidd
-additionalEmail.body = Gallwch ychwanegu hyd at 5 cyfeiriad e-bost ychwanegol. Dim ond i anfon hysbysiadau atoch y byddwn yn defnyddio’r cyfeiriadau e-bost hyn. Os nad ydynt yn cael eu defnyddio am 365 diwrnod, cânt eu tynnu o’ch cyfrif.
+additionalEmail.body = Gallwch ychwanegu hyd at 5 cyfeiriad e-bost ychwanegol. Dim ond i anfon hysbysiadau atoch y byddwn yn defnyddio’r cyfeiriadau e-bost hyn. Os nad ydynt yn cael eu defnyddio am 365 diwrnod, byddant yn cael eu tynnu o’ch cyfrif.
 additionalEmail.button.add = Ychwanegu cyfeiriad e-bost arall
 additionalEmail.remove = Dileu
 additionalEmail.limitReached = Nid oes modd i chi nodi rhagor o e-byst ychwanegol.

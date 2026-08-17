@@ -44,7 +44,9 @@ class ContactDetailsController @Inject() (
           userDetails.eori,
           userDetails.notificationEmail.address,
           userDetails.additionalEmails,
-          config.manageEmailGuideUrl
+          config.manageEmailGuideUrl,
+          userDetails.companyInformation.inactiveEori,
+          userDetails.notificationEmail.emailNotFound
         )
       )
     }

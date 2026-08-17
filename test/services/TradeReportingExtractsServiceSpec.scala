@@ -62,14 +62,15 @@ class TradeReportingExtractsServiceSpec extends SpecBase with MockitoSugar with 
 
         val companyInformation = CompanyInformation(
           name = "Test Company",
-          consent = Granted
+          consent = Granted,
+          inactiveEori = false
         )
         val userDetails        = UserDetails(
           eori = "GB1",
           additionalEmails = Seq.empty,
           authorisedUsers = Seq.empty,
           companyInformation = companyInformation,
-          notificationEmail = NotificationEmail("foo@bar.com", LocalDateTime.now())
+          notificationEmail = NotificationEmail("foo@bar.com", LocalDateTime.now(), false)
         )
 
         when(mockConnector.getOrSetupUser(any())(any())).thenReturn(Future.successful(userDetails))
@@ -239,7 +240,8 @@ class TradeReportingExtractsServiceSpec extends SpecBase with MockitoSugar with 
 
         val email = NotificationEmail(
           "test@test.com",
-          LocalDateTime.of(2024, 6, 1, 12, 0)
+          LocalDateTime.of(2024, 6, 1, 12, 0),
+          false
         )
 
         when(mockConnector.getNotificationEmail(any())(any())).thenReturn(Future.successful(email))
@@ -367,7 +369,8 @@ class TradeReportingExtractsServiceSpec extends SpecBase with MockitoSugar with 
 
         val companyInformation = CompanyInformation(
           name = "Test Company",
-          consent = Granted
+          consent = Granted,
+          inactiveEori = false
         )
         val eori               = "GB123456789000"
         val userDetails        = UserDetails(
@@ -375,7 +378,7 @@ class TradeReportingExtractsServiceSpec extends SpecBase with MockitoSugar with 
           additionalEmails = Seq.empty,
           authorisedUsers = Seq.empty,
           companyInformation = companyInformation,
-          notificationEmail = NotificationEmail("test@test.com", LocalDateTime.now())
+          notificationEmail = NotificationEmail("test@test.com", LocalDateTime.now(), false)
         )
         when(mockConnector.getUserDetails(eori)).thenReturn(Future.successful(userDetails))
         val result             = service.getUserDetails(eori).futureValue
@@ -539,10 +542,10 @@ class TradeReportingExtractsServiceSpec extends SpecBase with MockitoSugar with 
           eori = eori,
           additionalEmails = Seq.empty,
           authorisedUsers = Seq(authorisedUser),
-          companyInformation = CompanyInformation("Company", ConsentStatus.Granted),
+          companyInformation = CompanyInformation("Company", ConsentStatus.Granted, false),
           notificationEmail = null
         )
-        val companyInfo    = CompanyInformation("ThirdParty Ltd", ConsentStatus.Granted)
+        val companyInfo    = CompanyInformation("ThirdParty Ltd", ConsentStatus.Granted, false)
 
         when(mockConnector.getUserDetails(eori)).thenReturn(Future.successful(userDetails))
         when(mockConnector.getCompanyInformation("EORITAUTHEST1")).thenReturn(Future.successful(companyInfo))
@@ -578,10 +581,10 @@ class TradeReportingExtractsServiceSpec extends SpecBase with MockitoSugar with 
           eori = eori,
           additionalEmails = Seq.empty,
           authorisedUsers = Seq(authorisedUser),
-          companyInformation = CompanyInformation("Company", ConsentStatus.Granted),
+          companyInformation = CompanyInformation("Company", ConsentStatus.Granted, false),
           notificationEmail = null
         )
-        val companyInfo    = CompanyInformation("NoConsent Ltd", ConsentStatus.Denied)
+        val companyInfo    = CompanyInformation("NoConsent Ltd", ConsentStatus.Denied, false)
 
         when(mockConnector.getUserDetails(eori)).thenReturn(Future.successful(userDetails))
         when(mockConnector.getCompanyInformation("EORITAUTHEST2")).thenReturn(Future.successful(companyInfo))
@@ -604,7 +607,7 @@ class TradeReportingExtractsServiceSpec extends SpecBase with MockitoSugar with 
           eori = eori,
           additionalEmails = Seq.empty,
           authorisedUsers = Seq.empty,
-          companyInformation = CompanyInformation("Company", ConsentStatus.Granted),
+          companyInformation = CompanyInformation("Company", ConsentStatus.Granted, false),
           notificationEmail = null
         )
 
@@ -641,7 +644,7 @@ class TradeReportingExtractsServiceSpec extends SpecBase with MockitoSugar with 
           eori = eori,
           additionalEmails = Seq.empty,
           authorisedUsers = Seq(authorisedUser),
-          companyInformation = CompanyInformation("Company", ConsentStatus.Granted),
+          companyInformation = CompanyInformation("Company", ConsentStatus.Granted, false),
           notificationEmail = null
         )
 

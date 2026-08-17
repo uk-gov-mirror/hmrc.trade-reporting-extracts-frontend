@@ -63,9 +63,10 @@ class TradeReportingExtractsConnectorSpec extends SpecBase with ScalaFutures wit
             authorisedUsers = Seq.empty,
             companyInformation = CompanyInformation(
               name = "Test Company",
-              consent = Granted
+              consent = Granted,
+              inactiveEori = false
             ),
-            notificationEmail = NotificationEmail("test@test.com", LocalDateTime.of(2024, 6, 1, 12, 0))
+            notificationEmail = NotificationEmail("test@test.com", LocalDateTime.of(2024, 6, 1, 12, 0), false)
           )
         )
 
@@ -471,7 +472,8 @@ class TradeReportingExtractsConnectorSpec extends SpecBase with ScalaFutures wit
         val response = Json.toJson(
           NotificationEmail(
             "test@test.com",
-            LocalDateTime.of(2024, 6, 1, 12, 0)
+            LocalDateTime.of(2024, 6, 1, 12, 0),
+            false
           )
         )
 
@@ -537,7 +539,8 @@ class TradeReportingExtractsConnectorSpec extends SpecBase with ScalaFutures wit
         val response = Json.toJson(
           CompanyInformation(
             "companyName",
-            ConsentStatus.Granted
+            ConsentStatus.Granted,
+            false
           )
         )
 
@@ -909,9 +912,10 @@ class TradeReportingExtractsConnectorSpec extends SpecBase with ScalaFutures wit
             authorisedUsers = Seq.empty,
             companyInformation = CompanyInformation(
               name = "Test Company",
-              consent = Granted
+              consent = Granted,
+              false
             ),
-            notificationEmail = NotificationEmail("test@test.com", LocalDateTime.now())
+            notificationEmail = NotificationEmail("test@test.com", LocalDateTime.now(), false)
           )
 
           server.stubFor(

@@ -56,7 +56,7 @@ class ReportGuidanceControllerSpec extends SpecBase with MockitoSugar {
       val mockService = mock[TradeReportingExtractsService]
       when(mockService.getReportRequestLimitNumber(any())).thenReturn(Future.successful("25"))
       when(mockService.getNotificationEmail(any())(any()))
-        .thenReturn(Future.successful(NotificationEmail("test@email.com", LocalDateTime.now())))
+        .thenReturn(Future.successful(NotificationEmail("test@email.com", LocalDateTime.now(), false)))
 
       val application = appBuilder(Some(emptyUserAnswers), mockService, thirdPartyEnabled = true).build()
 
@@ -94,7 +94,7 @@ class ReportGuidanceControllerSpec extends SpecBase with MockitoSugar {
       val mockService = mock[TradeReportingExtractsService]
       when(mockService.getReportRequestLimitNumber(any())).thenReturn(Future.successful("25"))
       when(mockService.getNotificationEmail(any())(any()))
-        .thenReturn(Future.successful(NotificationEmail("test@email.com", LocalDateTime.now())))
+        .thenReturn(Future.successful(NotificationEmail("test@email.com", LocalDateTime.now(), false)))
 
       val application = appBuilder(Some(userAnswers), mockService)
         .overrides(
@@ -139,7 +139,7 @@ class ReportGuidanceControllerSpec extends SpecBase with MockitoSugar {
       val mockService = mock[TradeReportingExtractsService]
       when(mockService.getReportRequestLimitNumber(any())).thenReturn(Future.successful("25"))
       when(mockService.getNotificationEmail(any())(any()))
-        .thenReturn(Future.successful(NotificationEmail("test@email.com", LocalDateTime.now())))
+        .thenReturn(Future.successful(NotificationEmail("test@email.com", LocalDateTime.now(), false)))
 
       val application = appBuilder(Some(userAnswers), mockService)
         .overrides(

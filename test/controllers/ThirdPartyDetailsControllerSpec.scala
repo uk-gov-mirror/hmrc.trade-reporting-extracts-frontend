@@ -62,7 +62,7 @@ class ThirdPartyDetailsControllerSpec extends SpecBase with MockitoSugar {
       )
 
       when(mockTradeReportingExtractsService.getCompanyInformation(any())(any()))
-        .thenReturn(Future.successful(CompanyInformation("foo", ConsentStatus.Granted)))
+        .thenReturn(Future.successful(CompanyInformation("foo", ConsentStatus.Granted, false)))
 
       when(mockTradeReportingExtractsService.getThirdPartyDetails(any(), any())(any()))
         .thenReturn(
@@ -123,7 +123,7 @@ class ThirdPartyDetailsControllerSpec extends SpecBase with MockitoSugar {
       )
 
       when(mockTradeReportingExtractsService.getCompanyInformation(any())(any()))
-        .thenReturn(Future.successful(CompanyInformation("foo", ConsentStatus.Granted)))
+        .thenReturn(Future.successful(CompanyInformation("foo", ConsentStatus.Granted, false)))
 
       when(mockTradeReportingExtractsService.getThirdPartyDetails(any(), any())(any()))
         .thenReturn(
@@ -185,7 +185,7 @@ class ThirdPartyDetailsControllerSpec extends SpecBase with MockitoSugar {
       )
 
       when(mockTradeReportingExtractsService.getCompanyInformation(any())(any()))
-        .thenReturn(Future.successful(CompanyInformation("foo", ConsentStatus.Granted)))
+        .thenReturn(Future.successful(CompanyInformation("foo", ConsentStatus.Granted, false)))
 
       when(mockTradeReportingExtractsService.getThirdPartyDetails(any(), any())(any()))
         .thenReturn(
@@ -247,7 +247,7 @@ class ThirdPartyDetailsControllerSpec extends SpecBase with MockitoSugar {
       )
 
       when(mockTradeReportingExtractsService.getCompanyInformation(any())(any()))
-        .thenReturn(Future.successful(CompanyInformation("foo", ConsentStatus.Denied)))
+        .thenReturn(Future.successful(CompanyInformation("foo", ConsentStatus.Denied, false)))
 
       when(mockTradeReportingExtractsService.getThirdPartyDetails(any(), any())(any()))
         .thenReturn(
@@ -305,7 +305,7 @@ class ThirdPartyDetailsControllerSpec extends SpecBase with MockitoSugar {
       )
 
       when(mockTradeReportingExtractsService.getCompanyInformation(any())(any()))
-        .thenReturn(Future.successful(CompanyInformation("foo", ConsentStatus.Denied)))
+        .thenReturn(Future.successful(CompanyInformation("foo", ConsentStatus.Denied, false)))
 
       when(mockTradeReportingExtractsService.getThirdPartyDetails(any(), any())(any()))
         .thenReturn(
@@ -366,7 +366,7 @@ class ThirdPartyDetailsControllerSpec extends SpecBase with MockitoSugar {
       )
 
       when(mockTradeReportingExtractsService.getCompanyInformation(any())(any()))
-        .thenReturn(Future.successful(CompanyInformation("foo", ConsentStatus.Denied)))
+        .thenReturn(Future.successful(CompanyInformation("foo", ConsentStatus.Denied, false)))
 
       when(mockTradeReportingExtractsService.getThirdPartyDetails(any(), any())(any()))
         .thenReturn(Future.successful(thirdPartyDetails))
@@ -413,7 +413,7 @@ class ThirdPartyDetailsControllerSpec extends SpecBase with MockitoSugar {
       )
 
       when(mockTradeReportingExtractsService.getCompanyInformation(any())(any()))
-        .thenReturn(Future.successful(CompanyInformation("foo", ConsentStatus.Denied)))
+        .thenReturn(Future.successful(CompanyInformation("foo", ConsentStatus.Denied, false)))
 
       when(mockTradeReportingExtractsService.getThirdPartyDetails(any(), any())(any()))
         .thenReturn(Future.successful(thirdPartyDetails))
@@ -458,7 +458,7 @@ class ThirdPartyDetailsControllerSpec extends SpecBase with MockitoSugar {
       )
 
       when(mockTradeReportingExtractsService.getCompanyInformation(any())(any()))
-        .thenReturn(Future.successful(CompanyInformation("foo", ConsentStatus.Denied)))
+        .thenReturn(Future.successful(CompanyInformation("foo", ConsentStatus.Denied, false)))
 
       when(mockTradeReportingExtractsService.getThirdPartyDetails(any(), any())(any()))
         .thenReturn(Future.successful(thirdPartyDetails))
@@ -503,7 +503,7 @@ class ThirdPartyDetailsControllerSpec extends SpecBase with MockitoSugar {
       )
 
       when(mockTradeReportingExtractsService.getCompanyInformation(any())(any()))
-        .thenReturn(Future.successful(CompanyInformation("foo", ConsentStatus.Denied)))
+        .thenReturn(Future.successful(CompanyInformation("foo", ConsentStatus.Denied, false)))
 
       when(mockTradeReportingExtractsService.getThirdPartyDetails(any(), any())(any()))
         .thenReturn(Future.successful(thirdPartyDetails))
@@ -548,7 +548,7 @@ class ThirdPartyDetailsControllerSpec extends SpecBase with MockitoSugar {
       )
 
       when(mockTradeReportingExtractsService.getCompanyInformation(any())(any()))
-        .thenReturn(Future.successful(CompanyInformation("foo", ConsentStatus.Denied)))
+        .thenReturn(Future.successful(CompanyInformation("foo", ConsentStatus.Denied, false)))
 
       when(mockTradeReportingExtractsService.getThirdPartyDetails(any(), any())(any()))
         .thenReturn(Future.successful(thirdPartyDetails))
@@ -589,7 +589,7 @@ class ThirdPartyDetailsControllerSpec extends SpecBase with MockitoSugar {
         when(mockSessionRepository.set(userAnswersCaptor.capture())).thenReturn(Future.successful(true))
 
         when(mockTradeReportingExtractsService.getCompanyInformation(any())(any()))
-          .thenReturn(Future.successful(CompanyInformation("foo", ConsentStatus.Granted)))
+          .thenReturn(Future.successful(CompanyInformation("foo", ConsentStatus.Granted, false)))
 
         when(mockTradeReportingExtractsService.getThirdPartyDetails(any(), any())(any()))
           .thenReturn(

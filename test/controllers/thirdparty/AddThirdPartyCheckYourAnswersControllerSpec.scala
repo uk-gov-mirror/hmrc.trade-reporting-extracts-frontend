@@ -66,7 +66,7 @@ class AddThirdPartyCheckYourAnswersControllerSpec extends SpecBase with MockitoS
         .value
 
       when(mockTradeReportingExtractsService.getCompanyInformation(any())(any()))
-        .thenReturn(Future.successful(CompanyInformation("businessInfo", ConsentStatus.Granted)))
+        .thenReturn(Future.successful(CompanyInformation("businessInfo", ConsentStatus.Granted, false)))
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers))
@@ -178,7 +178,7 @@ class AddThirdPartyCheckYourAnswersControllerSpec extends SpecBase with MockitoS
         .value
 
       when(mockTradeReportingExtractsService.getCompanyInformation(any())(any()))
-        .thenReturn(Future.successful(CompanyInformation("businessInfo", ConsentStatus.Denied)))
+        .thenReturn(Future.successful(CompanyInformation("businessInfo", ConsentStatus.Denied, false)))
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers))
@@ -304,7 +304,7 @@ class AddThirdPartyCheckYourAnswersControllerSpec extends SpecBase with MockitoS
         .thenReturn(Future.successful(ThirdPartyAddedConfirmation(thirdPartyEori = "GB123456123456")))
 
       when(mockTradeReportingExtractsService.getCompanyInformation(any())(any()))
-        .thenReturn(Future.successful(CompanyInformation("businessInfo", ConsentStatus.Granted)))
+        .thenReturn(Future.successful(CompanyInformation("businessInfo", ConsentStatus.Granted, false)))
       when(mockAuditService.auditThirdPartyAdded(any())(any())).thenReturn(Future.successful(()))
 
       val application = applicationBuilder(userAnswers = Some(userAnswers))
@@ -464,7 +464,7 @@ class AddThirdPartyCheckYourAnswersControllerSpec extends SpecBase with MockitoS
         .thenReturn(Future.successful(ThirdPartyAddedConfirmation(thirdPartyEori = "GB123456123456")))
 
       when(mockTradeReportingExtractsService.getCompanyInformation(any())(any()))
-        .thenReturn(Future.successful(CompanyInformation("businessInfo", ConsentStatus.Granted)))
+        .thenReturn(Future.successful(CompanyInformation("businessInfo", ConsentStatus.Granted, false)))
       when(mockAuditService.auditThirdPartyAdded(any())(any())).thenReturn(Future.successful(()))
 
       val application = applicationBuilder(userAnswers = Some(userAnswers))

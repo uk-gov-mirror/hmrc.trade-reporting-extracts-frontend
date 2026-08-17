@@ -46,7 +46,7 @@ class SubmitReportControllerSpec extends SpecBase {
       val mockReportRequestDataService      = mock[ReportRequestDataService]
 
       val userAnswers       = emptyUserAnswers.set(ChooseEoriPage, Myeori).success.value
-      val notificationEmail = NotificationEmail("test@example.com", LocalDateTime.now())
+      val notificationEmail = NotificationEmail("test@example.com", LocalDateTime.now(), false)
 
       when(mockTradeReportingExtractsService.getNotificationEmail(any())(any()))
         .thenReturn(Future.successful(notificationEmail))
@@ -131,7 +131,7 @@ class SubmitReportControllerSpec extends SpecBase {
       val mockReportRequestDataService      = mock[ReportRequestDataService]
 
       val userAnswers         = emptyUserAnswers.set(ChooseEoriPage, Myeori).success.value
-      val notificationEmail   = NotificationEmail("test@example.com", LocalDateTime.now())
+      val notificationEmail   = NotificationEmail("test@example.com", LocalDateTime.now(), false)
       val reportConfirmations = Seq(ReportConfirmation("MyReport", "importHeader", "Reference"))
 
       val fixedInstant = Instant.parse("2025-06-01T12:00:00Z")
@@ -247,7 +247,7 @@ class SubmitReportControllerSpec extends SpecBase {
       val mockTradeReportingExtractsService = mock[TradeReportingExtractsService]
       val mockReportRequestDataService      = mock[ReportRequestDataService]
 
-      val notificationEmail   = NotificationEmail("primary@example.com", LocalDateTime.now())
+      val notificationEmail   = NotificationEmail("primary@example.com", LocalDateTime.now(), false)
       val reportConfirmations = Seq(ReportConfirmation("MyReport", "importHeader", "Reference"))
 
       val fixedInstant = Instant.parse("2025-06-01T12:00:00Z")

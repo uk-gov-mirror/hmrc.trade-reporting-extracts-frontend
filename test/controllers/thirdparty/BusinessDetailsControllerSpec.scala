@@ -39,7 +39,7 @@ class BusinessDetailsControllerSpec extends SpecBase with MockitoSugar {
   "BusinessDetailsController" - {
 
     val businessEori      = "GB123456789000"
-    val companyInfo       = CompanyInformation("Test Business Ltd", ConsentStatus.Granted)
+    val companyInfo       = CompanyInformation("Test Business Ltd", ConsentStatus.Granted, false)
     val thirdPartyDetails = ThirdPartyDetails(
       referenceName = None,
       accessStartDate = LocalDate.of(2025, 1, 1),

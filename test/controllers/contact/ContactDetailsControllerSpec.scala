@@ -48,7 +48,7 @@ class ContactDetailsControllerSpec extends SpecBase {
           additionalEmails = Seq("test@example.com"),
           authorisedUsers = Seq.empty,
           companyInformation = companyInformation,
-          notificationEmail = NotificationEmail("notify@example.com", LocalDateTime.now())
+          notificationEmail = NotificationEmail("notify@example.com", LocalDateTime.now(), false)
         )
 
         when(mockService.getUserDetails(any[String])(any[HeaderCarrier]))
@@ -65,11 +65,126 @@ class ContactDetailsControllerSpec extends SpecBase {
           eori,
           "notify@example.com",
           Seq("test@example.com"),
-          manageEmailGuideUrl
+          manageEmailGuideUrl,
+          false,
+          false
         )(
           request,
           messages(application)
         ).toString
+      }
+    }
+
+    "must return OK and render the correct view for when a user has no valid email address" in new Setup {
+
+      running(application) {
+
+        val userDetails = UserDetails(
+          eori = eori,
+          additionalEmails = Seq("test@example.com"),
+          authorisedUsers = Seq.empty,
+          companyInformation = companyInformation,
+          notificationEmail = NotificationEmail("notify@example.com", LocalDateTime.now(), true)
+        )
+
+        when(mockService.getUserDetails(any[String])(any[HeaderCarrier]))
+          .thenReturn(Future.successful(userDetails))
+
+        val request = FakeRequest(GET, controllers.contact.routes.ContactDetailsController.onPageLoad().url)
+        val result  = route(application, request).value
+
+        val view = application.injector.instanceOf[ContactDetailsView]
+
+        status(result) mustEqual OK
+        contentAsString(result) mustEqual view(
+          companyInformation,
+          eori,
+          "notify@example.com",
+          Seq("test@example.com"),
+          manageEmailGuideUrl,
+          false,
+          true
+        )(
+          request,
+          messages(application)
+        ).toString
+        contentAsString(result) must include(
+          "We are unable to display your registered email address because there is no verified email address."
+        )
+      }
+    }
+
+    "must return OK and render the correct view for when a user has an inactive eori" in new Setup {
+
+      running(application) {
+
+        val userDetails = UserDetails(
+          eori = eori,
+          additionalEmails = Seq("test@example.com"),
+          authorisedUsers = Seq.empty,
+          companyInformation = companyInformation.copy(inactiveEori = true),
+          notificationEmail = NotificationEmail("notify@example.com", LocalDateTime.now(), false)
+        )
+
+        when(mockService.getUserDetails(any[String])(any[HeaderCarrier]))
+          .thenReturn(Future.successful(userDetails))
+
+        val request = FakeRequest(GET, controllers.contact.routes.ContactDetailsController.onPageLoad().url)
+        val result  = route(application, request).value
+
+        val view = application.injector.instanceOf[ContactDetailsView]
+
+        status(result) mustEqual OK
+        contentAsString(result) mustEqual view(
+          companyInformation,
+          eori,
+          "notify@example.com",
+          Seq("test@example.com"),
+          manageEmailGuideUrl,
+          true,
+          false
+        )(
+          request,
+          messages(application)
+        ).toString
+        contentAsString(result) must include("Your EORI number is inactive")
+      }
+    }
+
+    "must return OK and render the correct view for when a user has an inactive eori and no available email address" in new Setup {
+
+      running(application) {
+
+        val userDetails = UserDetails(
+          eori = eori,
+          additionalEmails = Seq("test@example.com"),
+          authorisedUsers = Seq.empty,
+          companyInformation = companyInformation.copy(inactiveEori = true),
+          notificationEmail = NotificationEmail("notify@example.com", LocalDateTime.now(), true)
+        )
+
+        when(mockService.getUserDetails(any[String])(any[HeaderCarrier]))
+          .thenReturn(Future.successful(userDetails))
+
+        val request = FakeRequest(GET, controllers.contact.routes.ContactDetailsController.onPageLoad().url)
+        val result  = route(application, request).value
+
+        val view = application.injector.instanceOf[ContactDetailsView]
+
+        status(result) mustEqual OK
+        contentAsString(result) mustEqual view(
+          companyInformation,
+          eori,
+          "notify@example.com",
+          Seq("test@example.com"),
+          manageEmailGuideUrl,
+          true,
+          true
+        )(
+          request,
+          messages(application)
+        ).toString
+        contentAsString(result) must include("Your EORI number is inactive")
       }
     }
 
@@ -90,7 +205,7 @@ class ContactDetailsControllerSpec extends SpecBase {
           additionalEmails = existingEmails,
           authorisedUsers = Seq.empty,
           companyInformation = companyInformation,
-          notificationEmail = NotificationEmail("notify@example.com", LocalDateTime.now())
+          notificationEmail = NotificationEmail("notify@example.com", LocalDateTime.now(), false)
         )
 
         when(mockService.getUserDetails(any[String])(any[HeaderCarrier]))
@@ -104,7 +219,15 @@ class ContactDetailsControllerSpec extends SpecBase {
         status(result) mustEqual OK
         val body = contentAsString(result)
         val msgs = messages(application)
-        body mustEqual view(companyInformation, eori, "notify@example.com", existingEmails, manageEmailGuideUrl)(
+        body mustEqual view(
+          companyInformation,
+          eori,
+          "notify@example.com",
+          existingEmails,
+          manageEmailGuideUrl,
+          false,
+          false
+        )(
           request,
           msgs
         ).toString
@@ -123,7 +246,8 @@ class ContactDetailsControllerSpec extends SpecBase {
     val companyInformation: CompanyInformation =
       CompanyInformation(
         name = "ABC Company",
-        consent = Granted
+        consent = Granted,
+        inactiveEori = false
       )
 
     val eori: String = "GB123456789002"

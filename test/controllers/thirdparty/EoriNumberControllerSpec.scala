@@ -72,7 +72,7 @@ class EoriNumberControllerSpec extends SpecBase with MockitoSugar {
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
       val mockTradeReportingExtractsService = mock[TradeReportingExtractsService]
-      val companyInfo                       = CompanyInformation(name = "Test", consent = Granted)
+      val companyInfo                       = CompanyInformation(name = "Test", consent = Granted, inactiveEori = false)
 
       when(mockTradeReportingExtractsService.getCompanyInformation(any())(any()))
         .thenReturn(Future.successful(companyInfo))
@@ -102,7 +102,7 @@ class EoriNumberControllerSpec extends SpecBase with MockitoSugar {
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
       val mockTradeReportingExtractsService = mock[TradeReportingExtractsService]
-      val companyInfo                       = CompanyInformation(name = "Test", consent = Denied)
+      val companyInfo                       = CompanyInformation(name = "Test", consent = Denied, inactiveEori = false)
 
       when(mockTradeReportingExtractsService.getCompanyInformation(any())(any()))
         .thenReturn(Future.successful(companyInfo))
@@ -191,7 +191,7 @@ class EoriNumberControllerSpec extends SpecBase with MockitoSugar {
       when(mockSessionRepository.set(userAnswersCaptor.capture())) thenReturn Future.successful(true)
 
       val mockTradeReportingExtractsService = mock[TradeReportingExtractsService]
-      val companyInfo                       = CompanyInformation(name = "Test", consent = Denied)
+      val companyInfo                       = CompanyInformation(name = "Test", consent = Denied, inactiveEori = false)
 
       when(mockTradeReportingExtractsService.getCompanyInformation(any())(any()))
         .thenReturn(Future.successful(companyInfo))
@@ -269,7 +269,7 @@ class EoriNumberControllerSpec extends SpecBase with MockitoSugar {
       when(mockSessionRepository.set(userAnswersCaptor.capture())) thenReturn Future.successful(true)
 
       val mockTradeReportingExtractsService = mock[TradeReportingExtractsService]
-      val companyInfo                       = CompanyInformation(name = "Test", consent = Denied)
+      val companyInfo                       = CompanyInformation(name = "Test", consent = Denied, inactiveEori = false)
 
       when(mockTradeReportingExtractsService.getCompanyInformation(any())(any()))
         .thenReturn(Future.successful(companyInfo))
@@ -316,7 +316,7 @@ class EoriNumberControllerSpec extends SpecBase with MockitoSugar {
       when(mockSessionRepository.set(userAnswersCaptor.capture())) thenReturn Future.successful(true)
 
       val mockTradeReportingExtractsService = mock[TradeReportingExtractsService]
-      val companyInfo                       = CompanyInformation(name = "Test", consent = Denied)
+      val companyInfo                       = CompanyInformation(name = "Test", consent = Denied, inactiveEori = false)
 
       when(mockTradeReportingExtractsService.getCompanyInformation(any())(any()))
         .thenReturn(Future.successful(companyInfo))

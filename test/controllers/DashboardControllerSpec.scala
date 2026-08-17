@@ -34,13 +34,13 @@ import scala.concurrent.Future
 
 class DashboardControllerSpec extends SpecBase with MockitoSugar {
   val companyInformation: CompanyInformation =
-    CompanyInformation("Test Company", Granted)
+    CompanyInformation("Test Company", Granted, false)
   val userDetails: UserDetails               = UserDetails(
     eori = testEori,
     additionalEmails = Seq.empty,
     authorisedUsers = Seq.empty,
     companyInformation = companyInformation,
-    notificationEmail = NotificationEmail("test@test.com", LocalDateTime.now)
+    notificationEmail = NotificationEmail("test@test.com", LocalDateTime.now, false)
   )
 
   trait Setup {

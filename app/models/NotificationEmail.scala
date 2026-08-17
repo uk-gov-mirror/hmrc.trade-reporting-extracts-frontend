@@ -20,7 +20,7 @@ import play.api.libs.json.{Json, OFormat}
 
 import java.time.LocalDateTime
 
-case class NotificationEmail(var address: String, timestamp: LocalDateTime)
+case class NotificationEmail(var address: String, timestamp: LocalDateTime, emailNotFound: Boolean)
 
 object NotificationEmail:
   implicit val format: OFormat[NotificationEmail] = Json.format[NotificationEmail]

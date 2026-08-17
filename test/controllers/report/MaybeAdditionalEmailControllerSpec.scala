@@ -52,7 +52,7 @@ class MaybeAdditionalEmailControllerSpec extends SpecBase with MockitoSugar {
     "must return OK and the correct view for a GET" in {
 
       when(mockTradeReportingExtractsService.getNotificationEmail(any())(any()))
-        .thenReturn(Future.successful(NotificationEmail("test@email.com", LocalDateTime.now())))
+        .thenReturn(Future.successful(NotificationEmail("test@email.com", LocalDateTime.now(), false)))
 
       val application = applicationBuilder(userAnswers =
         Some(
@@ -85,7 +85,7 @@ class MaybeAdditionalEmailControllerSpec extends SpecBase with MockitoSugar {
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
       when(mockTradeReportingExtractsService.getNotificationEmail(any())(any()))
-        .thenReturn(Future.successful(NotificationEmail("test@email.com", LocalDateTime.now())))
+        .thenReturn(Future.successful(NotificationEmail("test@email.com", LocalDateTime.now(), false)))
 
       val userAnswers = UserAnswers(userAnswersId)
         .set(MaybeAdditionalEmailPage, true)
@@ -123,7 +123,7 @@ class MaybeAdditionalEmailControllerSpec extends SpecBase with MockitoSugar {
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
       when(mockTradeReportingExtractsService.getNotificationEmail(any())(any()))
-        .thenReturn(Future.successful(NotificationEmail("test@email.com", LocalDateTime.now())))
+        .thenReturn(Future.successful(NotificationEmail("test@email.com", LocalDateTime.now(), false)))
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
@@ -148,7 +148,7 @@ class MaybeAdditionalEmailControllerSpec extends SpecBase with MockitoSugar {
     "must return a Bad Request and errors when invalid data is submitted" in {
 
       when(mockTradeReportingExtractsService.getNotificationEmail(any())(any()))
-        .thenReturn(Future.successful(NotificationEmail("test@email.com", LocalDateTime.now())))
+        .thenReturn(Future.successful(NotificationEmail("test@email.com", LocalDateTime.now(), false)))
 
       val application = applicationBuilder(userAnswers =
         Some(
