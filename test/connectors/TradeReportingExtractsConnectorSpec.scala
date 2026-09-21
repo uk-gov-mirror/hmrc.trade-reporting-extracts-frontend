@@ -27,8 +27,8 @@ import models.ReportStatus.IN_PROGRESS
 import models.ReportTypeName.IMPORTS_ITEM_REPORT
 import models.availableReports.{AvailableReportAction, AvailableReportsViewModel, AvailableThirdPartyReportsViewModel, AvailableUserReportsViewModel}
 import models.report.*
-import models.thirdparty.{AccountAuthorityOverViewModel, EoriBusinessAccessInfo, EoriBusinessInfo, ThirdPartyAddedConfirmation, ThirdPartyRequest}
-import models.{AuditDownloadRequest, CompanyInformation, ConsentStatus, NotificationEmail, ThirdPartyDetails, UpdateEmailPreference, UserActiveStatus, UserDetails}
+import models.thirdparty.{EoriBusinessAccessInfo, EoriBusinessInfo, ThirdPartyAddedConfirmation, ThirdPartyRequest}
+import models.{AuditDownloadRequest, CompanyInformation, ConsentStatus, NotificationEmail, ThirdPartyDetails, UpdateEmailPreference, UserDetails}
 import org.apache.pekko.Done
 import org.scalatest.concurrent.ScalaFutures
 import play.api.inject.guice.GuiceApplicationBuilder

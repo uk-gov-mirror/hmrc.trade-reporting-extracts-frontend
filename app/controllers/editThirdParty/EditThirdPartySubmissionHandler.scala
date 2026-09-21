@@ -149,109 +149,110 @@ class EditThirdPartySubmissionHandler @Inject (
       case (None, Some(prevValue), _)                          => Some(localDateToInstant(prevValue))
       case (_, _, _)                                           => None
     }
+
+  private def buildThirdPartyUpdatedEvent(
+    requesterEori: String,
+    thirdPartyEori: String,
+    previousDetails: ThirdPartyDetails,
+    updatedDetails: ThirdPartyRequest
+  ): ThirdPartyUpdatedEvent = {
+
+    val updates = ListBuffer[DataUpdate]()
+    addUpdateIfChanged(
+      updates,
+      "accessType",
+      formatAccessType(previousDetails.dataTypes),
+      formatAccessType(updatedDetails.accessType)
+    )
+
+    addUpdateIfChanged(
+      updates,
+      "referenceName",
+      previousDetails.referenceName.getOrElse(""),
+      updatedDetails.referenceName.getOrElse("")
+    )
+
+    addUpdateIfChanged(
+      updates,
+      "thirdPartyAccessStart",
+      formatLocalDateAsInstant(previousDetails.accessStartDate),
+      updatedDetails.accessStart.toString
+    )
+
+    addUpdateIfChanged(
+      updates,
+      "thirdPartyAccessEnd",
+      formatDateAsInstant(previousDetails.accessEndDate),
+      formatInstantAsString(updatedDetails.accessEnd)
+    )
+
+    val previousAllData = previousDetails.dataStartDate.isEmpty && previousDetails.dataEndDate.isEmpty
+    val newAllData      = updatedDetails.reportDateStart.isEmpty && updatedDetails.reportDateEnd.isEmpty
+    addUpdateIfChanged(updates, "thirdPartyGivenAccessAllData", previousAllData.toString, newAllData.toString)
+
+    addUpdateIfChanged(
+      updates,
+      "thirdPartyDataStart",
+      formatDataDate(previousDetails.dataStartDate),
+      formatInstantAsDataString(updatedDetails.reportDateStart)
+    )
+
+    addUpdateIfChanged(
+      updates,
+      "thirdPartyDataEnd",
+      formatDataDate(previousDetails.dataEndDate),
+      formatInstantAsDataString(updatedDetails.reportDateEnd)
+    )
+
+    ThirdPartyUpdatedEvent(
+      requesterEori = requesterEori,
+      thirdPartyEori = thirdPartyEori,
+      updatesToThirdPartyData = updates.toList
+    )
+  }
+
+  private def addUpdateIfChanged(
+    updates: ListBuffer[DataUpdate],
+    fieldName: String,
+    previousValue: String,
+    newValue: String
+  ): Unit =
+    if (previousValue != newValue) {
+      updates += DataUpdate(fieldName, previousValue, newValue)
+    }
+
+  private def formatAccessType(dataTypes: Set[String]): String =
+    dataTypes match {
+      case types if types.contains("EXPORT") && types.contains("IMPORT") => "import, export"
+      case types if types.contains("EXPORT")                             => "export"
+      case _                                                             => "import"
+    }
+
+  private def formatLocalDateAsInstant(localDate: LocalDate): String =
+    localDate.atStartOfDay().toInstant(ZoneOffset.UTC).toString
+
+  private def formatDateAsInstant(dateOpt: Option[LocalDate]): String =
+    dateOpt match {
+      case Some(endDate) => formatLocalDateAsInstant(endDate)
+      case None          => "indefinite"
+    }
+
+  private def formatInstantAsString(instantOpt: Option[Instant]): String =
+    instantOpt match {
+      case Some(endDate) => endDate.toString
+      case None          => "indefinite"
+    }
+
+  private def formatDataDate(dateOpt: Option[LocalDate]): String =
+    dateOpt match {
+      case Some(startDate) => formatLocalDateAsInstant(startDate)
+      case None            => "all available data"
+    }
+
+  private def formatInstantAsDataString(instantOpt: Option[Instant]): String =
+    instantOpt match {
+      case Some(startDate) => startDate.toString
+      case None            => "all available data"
+    }
+
 }
-
-private def buildThirdPartyUpdatedEvent(
-  requesterEori: String,
-  thirdPartyEori: String,
-  previousDetails: ThirdPartyDetails,
-  updatedDetails: ThirdPartyRequest
-): ThirdPartyUpdatedEvent = {
-
-  val updates = ListBuffer[DataUpdate]()
-  addUpdateIfChanged(
-    updates,
-    "accessType",
-    formatAccessType(previousDetails.dataTypes),
-    formatAccessType(updatedDetails.accessType)
-  )
-
-  addUpdateIfChanged(
-    updates,
-    "referenceName",
-    previousDetails.referenceName.getOrElse(""),
-    updatedDetails.referenceName.getOrElse("")
-  )
-
-  addUpdateIfChanged(
-    updates,
-    "thirdPartyAccessStart",
-    formatLocalDateAsInstant(previousDetails.accessStartDate),
-    updatedDetails.accessStart.toString
-  )
-
-  addUpdateIfChanged(
-    updates,
-    "thirdPartyAccessEnd",
-    formatDateAsInstant(previousDetails.accessEndDate),
-    formatInstantAsString(updatedDetails.accessEnd)
-  )
-
-  val previousAllData = previousDetails.dataStartDate.isEmpty && previousDetails.dataEndDate.isEmpty
-  val newAllData      = updatedDetails.reportDateStart.isEmpty && updatedDetails.reportDateEnd.isEmpty
-  addUpdateIfChanged(updates, "thirdPartyGivenAccessAllData", previousAllData.toString, newAllData.toString)
-
-  addUpdateIfChanged(
-    updates,
-    "thirdPartyDataStart",
-    formatDataDate(previousDetails.dataStartDate),
-    formatInstantAsDataString(updatedDetails.reportDateStart)
-  )
-
-  addUpdateIfChanged(
-    updates,
-    "thirdPartyDataEnd",
-    formatDataDate(previousDetails.dataEndDate),
-    formatInstantAsDataString(updatedDetails.reportDateEnd)
-  )
-
-  ThirdPartyUpdatedEvent(
-    requesterEori = requesterEori,
-    thirdPartyEori = thirdPartyEori,
-    updatesToThirdPartyData = updates.toList
-  )
-}
-
-private def addUpdateIfChanged(
-  updates: ListBuffer[DataUpdate],
-  fieldName: String,
-  previousValue: String,
-  newValue: String
-): Unit =
-  if (previousValue != newValue) {
-    updates += DataUpdate(fieldName, previousValue, newValue)
-  }
-
-private def formatAccessType(dataTypes: Set[String]): String =
-  dataTypes match {
-    case types if types.contains("EXPORT") && types.contains("IMPORT") => "import, export"
-    case types if types.contains("EXPORT")                             => "export"
-    case _                                                             => "import"
-  }
-
-private def formatLocalDateAsInstant(localDate: LocalDate): String =
-  localDate.atStartOfDay().toInstant(ZoneOffset.UTC).toString
-
-private def formatDateAsInstant(dateOpt: Option[LocalDate]): String =
-  dateOpt match {
-    case Some(endDate) => formatLocalDateAsInstant(endDate)
-    case None          => "indefinite"
-  }
-
-private def formatInstantAsString(instantOpt: Option[Instant]): String =
-  instantOpt match {
-    case Some(endDate) => endDate.toString
-    case None          => "indefinite"
-  }
-
-private def formatDataDate(dateOpt: Option[LocalDate]): String =
-  dateOpt match {
-    case Some(startDate) => formatLocalDateAsInstant(startDate)
-    case None            => "all available data"
-  }
-
-private def formatInstantAsDataString(instantOpt: Option[Instant]): String =
-  instantOpt match {
-    case Some(startDate) => startDate.toString
-    case None            => "all available data"
-  }
